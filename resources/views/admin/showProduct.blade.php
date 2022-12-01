@@ -1,45 +1,32 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     @include('admin.css')
-
     <style type="text/css">
-
-        .center{
+        .div_center{
             text-align: center;
-            padding-bottom: 40px
+            padding-bottom: 40px;
+            overflow-x: auto
+
+
         }
-        .h2_category{
+        .Productlist{
             font-size: 40px;
             padding-bottom:40px
-
-        }
-        .input{
-            color: black;
-            height: 35px;
-            padding-left: 5px;
-            border-radius: 5px
-        }
-        .category_table{
-            /* margin: auto;
-            width: 50%;
-            text-align: center;
-            margin-top: 30px;
-            border: 2px solid white; */
-
         }
         .table{
-            border-collapse: collapse;
-            color: white;
-            width: 50%;
-            text-align: center;
+             text-align: center;
+            padding-bottom: 40px;
             margin: auto;
-            border: 2px solid white;
+            width: 100%;
+            color: whitesmoke;
+            border-collapse: collapse;
         }
+        /* tr:hover {background-color: crimson;} */
+
     </style>
   </head>
   <body>
-
     <div class="container-scroller">
       <div class="row p-0 m-0 proBanner" id="proBanner">
         <div class="col-md-12 p-0 m-0">
@@ -66,42 +53,49 @@
         <!-- partial:partials/_navbar.html -->
         @include('admin.nav')
         <!-- partial -->
-
         <div class="main-panel">
             <div class="content-wrapper">
                 @if(session()->has('message'))
-                    <div class="alert alert-success">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" aria-hidden="true">
-                            x
-                          </button>
-                        {{session()->get('message')}}
-                    </div>
-
-                @endif
-                <div class="center">
-                    <h2 class="h2_category">Add Category</h2>
-                    <form action="{{url('/add_category')}}" method="POST" >
-                        @csrf
-                        <input class='input' placeholder="enter category" name="category_name">
-                        <input type="submit" name="submit" class="btn btn-primary" value="Add Category">
-                    </form>
-
+                <div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" aria-hidden="true">
+                        x
+                      </button>
+                    {{session()->get('message')}}
                 </div>
 
+            @endif
+                <div class="div_center">
+                   <h2 class="Productlist">Product List</h2>
 
                 <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col"><b>Category Name<b></th>
-                        <th scope="col"><b>Action<b></th>
+                        <th scope="col"><b>Product Name<b></th>
+                        <th scope="col"><b>Description<b></th>
+                        <th scope="col"><b>Quantity<b></th>
+                        <th scope="col"><b>Category<b></th>
+                        <th scope="col"><b>Price<b></th>
+                        <th scope="col"><b>Discount Price<b></th>
+                        <th scope="col"><b>Product Image<b></th>
+                        <th scope="col"><b>Delete<b></th>
+                        <th scope="col"><b>Edit<b></th>
+
+
 
                       </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categories as $category)
+                        @foreach ($products as $product)
                         <tr>
-                            <td><strong>{{$category->category_name}}</strong></td>
-                            <td><a onclick="return confirm('Are you sure You want to delete')" href="{{url('/delete_category', $category->id)}}" class="btn btn-danger">Delete</a></td>
+                            <td>{{$product->title}}</td>
+                            <td>{{$product->description}} </td>
+                            <td>{{$product->quantity}}</td>
+                            <td>{{$product->category}}</td>
+                            <td>{{$product->price}}</td>
+                            <td>{{$product->discounted_price}}</td>
+                            <td><img src="{{asset('product').'/'.$product->image}}"  />   </td>
+                            <td><a onclick="return confirm('Are you sure You want to delete')" class="btn btn-danger" href="{{url('/delete_product',$product->id)}}">Delete</a></td>
+                            <td><a class="btn btn-success" href="{{url('/update_product', $product->id)}}">Edit</a></td>
 
                           </tr>
 
@@ -109,7 +103,7 @@
                     </tbody>
 
                 </table>
-
+                </div>
             </div>
         </div>
           <!-- content-wrapper ends -->
