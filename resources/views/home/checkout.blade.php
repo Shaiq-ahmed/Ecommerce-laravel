@@ -144,7 +144,7 @@
             <div class="checkout">
                 <h4>Place Order</h4>
                 <a href="{{url('/cash_order')}}" class="btn btn-danger ">Cash On Delivery</a>
-                <a href="{{url('/placeorder')}}" class="btn btn-danger ">Payment Using Card</a>
+                <a href="{{url('/stripe',$totalprice)}}" class="btn btn-danger ">Payment Using Card</a>
             </div>
         </div>
 

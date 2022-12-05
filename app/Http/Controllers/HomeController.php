@@ -126,4 +126,10 @@ class HomeController extends Controller
         }
         return redirect()->back()->with('message', 'we have recieved your order we will confirm you soon');
     }
+
+    public function stripe($totalprice){
+
+        return view('home.stripe', compact('totalprice'));
+
+    }
 }

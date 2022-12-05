@@ -44,6 +44,7 @@ Route::get('/show_cart', [HomeController::class, 'show_cart']);
 Route::get('/remove_cartproduct/{id}', [HomeController::class, 'remove_cartproduct']);
 Route::get('/checkout', [HomeController::class, 'checkout']);
 Route::get('/cash_order', [HomeController::class, 'cash_order']);
+Route::get('/stripe/{totalprice}', [HomeController::class, 'stripe']);
 
 
 
