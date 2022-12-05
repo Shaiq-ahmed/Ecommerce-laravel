@@ -39,5 +39,13 @@ Route::get('/delete_product/{id}', [AdminController::class, 'delete_product']);
 Route::get('/update_product/{id}', [AdminController::class, 'update_product']);
 Route::post('/update_product_confirm/{id}', [AdminController::class, 'update_product_confirm']);
 Route::get('/product_details/{id}', [HomeController::class, 'product_details']);
+Route::post('/add_to_cart/{id}', [HomeController::class, 'add_to_cart']);
+Route::get('/show_cart', [HomeController::class, 'show_cart']);
+Route::get('/remove_cartproduct/{id}', [HomeController::class, 'remove_cartproduct']);
+Route::get('/checkout', [HomeController::class, 'checkout']);
+Route::get('/cash_order', [HomeController::class, 'cash_order']);
+
+
+
 
 

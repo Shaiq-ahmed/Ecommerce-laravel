@@ -23,6 +23,11 @@
       <link href="home/css/responsive.css" rel="stylesheet" />
       <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
    </head>
+   <style type="text/css">
+        .h6{
+            padding-top: 8px
+        }
+   </style>
    <body>
       <div class="hero_area">
          <!-- header section strats -->
@@ -39,16 +44,16 @@
           </div> --}}
           <div class="container">
             <div class="row" style="margin: auto;  padding:30px">
-              <div class="col-sm col-md-5">
+              <div class="col-sm col-md-6 col-lg-5">
                 <div class="box">
 
                     <div class="img-box">
-                       <img src="{{asset('/product').'/'.$product->image}}" alt="">
+                       <img src="{{asset('/product').'/'.$product->image}}" alt="" style="width: 350px">
                     </div>
 
                  </div>
               </div>
-              <div class="col-sm col-md-7" style="padding-top: 50px">
+              <div class="col-sm col-md-6 col-lg-7" style="padding-top: 50px">
                 <div class="detail-box">
                     <h5>
                        {{$product->title}}
@@ -71,10 +76,19 @@
 
                     @endif
 
-                      <h6><b>Product Description : </b> {{$product->description}}</h6>
-                      <h6 ><b>Category : </b><span class="badge badge-success">{{$product->category}}</span></h6>
-                      <h6><b>Available quantity :</b>{{$product->quantity}}</h6>
-                      <a href="" class="btn btn-info"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                      <h6 class="h6"><b>Product Description : </b> {{$product->description}}</h6>
+                      <h6 class="h6"><b>Category : </b><span class="badge badge-success">{{$product->category}}</span></h6>
+
+                      <form action="{{url('/add_to_cart',$product->id)}}" method="POST">
+                        @csrf
+                        <label for="quantity">Qty: </label>
+                        <input min="1" type="number" id="quantity" name="quantity" value="1" max="{{$product->quantity}}"/>
+                        <style>#quantity { padding:7px;width: 68px; border: 1px solid #555; }</style>
+                        {{-- <a href="" class="btn btn-info"><i class="fa fa-cart-plus"></i> Add to Cart</a> --}}
+                        <input type="submit"  value="Add to Cart">
+                      </form>
+
+
 
 
                  </div>
