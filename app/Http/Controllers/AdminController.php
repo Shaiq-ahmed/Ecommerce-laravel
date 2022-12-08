@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
+use App\Notifications\sendEmailNotification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
-use PhpParser\Node\Stmt\TryCatch;
+use Notification;
+use PDF;
 
 class AdminController extends Controller
 {
@@ -105,5 +107,60 @@ class AdminController extends Controller
         return redirect()->back()->with('message','product Updated Successfully');
 
 
+    }
+
+    public function show_all_orders(){
+
+        $orders = Order::all();
+
+        return view('admin.orders', compact('orders'));
+    }
+    public function deliver($id)
+    {
+
+        $order = Order::find($id);
+        $order->delivery_status = "delivered";
+        $order->save();
+
+        return redirect()->back();
+    }
+
+    public function pdf($id){
+        $order = Order::find($id);
+        // dd((public_path().'/product').'/'.$order->image);
+        $pdf = PDF::loadView('admin.pdf', compact('order'));
+        return $pdf->download('order_details.pdf');
+
+
+    }
+
+    public function sendEmail($id){
+
+        $order = Order::find($id);
+        return view('admin.sendEmail', compact('order'));
+    }
+
+    public function sendUserEmail(Request $request,$id){
+        $order = Order::find($id);
+        // $order = Order::where('id', $id)->get();
+
+        $details = [
+            'greeting' => $request->greeting,
+            'firstline' => $request->firstline,
+            'body' => $request->body,
+            'button' => $request->button,
+            'url' => $request->url,
+            'lastline' => $request->lastline
+
+        ];
+
+        Notification::send($order, new sendEmailNotification($details));
+        return redirect()->back();
+    }
+
+    public function search_order(Request $request){
+        $search = $request->search;
+        $orders = Order::where('name', 'LIKE', "%{$search}%")->orWhere('phone', 'LIKE', "%{$search}%")->orWhere('product_title', 'LIKE', "%{$search}%")->get();
+        return view('admin.orders',compact('orders'));
     }
 }

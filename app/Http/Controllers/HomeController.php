@@ -5,8 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
+Use Stripe;
+// use Stripe;
+// require_once('vendor/autoload.php');
+
+
+
 
 
 class HomeController extends Controller
@@ -23,7 +32,18 @@ class HomeController extends Controller
         $usertype = Auth::user()->usertype;
 
         if ($usertype == '1') {
-            return view('admin.home');
+
+            $totalproducts = Product::all()->count();
+            $totalorders = Order::all()->count();
+            $totalusers = User::all()->count();
+            $totalrevenue = 0;
+            $orders = Order::all();
+            $delivered = Order::where('delivery_status', '=', 'delivered')->count();
+
+            foreach ($orders as $order ){
+                $totalrevenue = $totalrevenue + $order->price;
+            }
+            return view('admin.home',compact('totalproducts', 'totalorders', 'totalusers','totalrevenue','delivered'));
         } else {
             $products = Product::paginate(5);
             return view('home.userpage', compact('products'));
@@ -132,4 +152,64 @@ class HomeController extends Controller
         return view('home.stripe', compact('totalprice'));
 
     }
+    public function stripePost(Request $request, $totalprice)
+
+    {
+
+
+        $stripe = Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        $stripe->paymentIntents()->create([
+
+
+                 "amount" => $totalprice / 100,
+
+                 "currency" => "usd",
+
+                 'payment_method_types' => [
+                    'card',
+                ],
+
+         ]);
+
+        $user = Auth::user();
+        $data = Cart::where('user_id', '=', $user->id)->get();
+        foreach ($data as $data)
+        {
+            $order = new Order;
+
+            $order->name = $data->name;
+            $order->email = $data->email;
+            $order->phone = $data->phone;
+            $order->address = $data->address;
+            $order->user_id = $data->user_id;
+            $order->product_title = $data->product_title;
+            $order->price = $data->price;
+            $order->quantity = $data->quantity;
+            $order->image = $data->image;
+            $order->product_id = $data->product_id;
+            $order->payment_status = 'paid';
+            $order->delivery_status = 'processing';
+
+            $order->save();
+
+            $cart_id = $data->id;
+            $cart = Cart::find($cart_id);
+            $cart->delete();
+
+
+
+        }
+
+
+
+        Session::flash('success', 'Payment successful!');
+
+
+
+
+        return back();
+
+    }
+
+
 }

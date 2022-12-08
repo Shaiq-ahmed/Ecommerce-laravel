@@ -4,7 +4,7 @@
 
 <head>
 
-    <title>Laravel 9 - Stripe Payment Gateway Integration Example - ItSolutionStuff.com</title>
+    <title>Laravel 9 - Stripe Payment Gateway Integration </title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
 
@@ -20,7 +20,7 @@
 
 
 
-    <h1>Paymnet Using Card</h1>
+    <h1>Paymnet Using Card Rs. {{$totalprice}}</h1>
 
 
 
@@ -58,7 +58,7 @@
 
                             role="form"
 
-                            {{-- action="{{ route('stripe.post') }}" --}}
+                            action="{{ route('stripe.post', $totalprice) }}"
 
                             method="post"
 

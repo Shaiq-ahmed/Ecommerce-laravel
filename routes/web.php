@@ -28,7 +28,7 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('/redirect', [HomeController::class, 'redirect']);
+Route::get('/redirect', [HomeController::class, 'redirect'])->middleware('auth', 'verified');
 Route::get('/view_category', [AdminController::class, 'view_category']);
 Route::post('/add_category', [AdminController::class, 'add_category']);
 Route::get('/delete_category/{id}', [AdminController::class, 'delete_category']);
@@ -45,6 +45,16 @@ Route::get('/remove_cartproduct/{id}', [HomeController::class, 'remove_cartprodu
 Route::get('/checkout', [HomeController::class, 'checkout']);
 Route::get('/cash_order', [HomeController::class, 'cash_order']);
 Route::get('/stripe/{totalprice}', [HomeController::class, 'stripe']);
+Route::post('/stripe/{totalprice}', [HomeController::class, 'stripePost' ])->name('stripe.post');
+Route::get('/orders', [AdminController::class, 'show_all_orders']);
+Route::get('/deliver/{id}', [AdminController::class, 'deliver']);
+Route::get('/pdf/{id}', [AdminController::class, 'pdf']);
+Route::get('phpinfo', function () {
+    phpinfo();});
+Route::get('/send_email/{id}', [AdminController::class, 'sendEmail']);
+Route::post('/send_user_email/{id}', [AdminController::class, 'sendUserEmail']);
+Route::get('/search_order', [AdminController::class, 'search_order']);
+
 
 
 
