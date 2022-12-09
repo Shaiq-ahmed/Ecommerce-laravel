@@ -210,6 +210,36 @@ class HomeController extends Controller
         return back();
 
     }
+    public function show_orders(){
+
+        if(Auth::id())
+        {
+            $user = Auth::user();
+            $user_id = $user->id;
+            $order = Order::where('user_id','=',$user_id)->get();
+            return view('home.orders', compact('order'));
+        }
+        else{
+            return redirect('login');
+        }
+
+
+    }
+
+    public function cancel_order($id){
+
+        $order = Order::find($id);
+        $order->delivery_status = 'You have cancelled the order';
+        $order->save();
+        return redirect()->back();
+    }
+
+    public function product_search(Request $request){
+        $keyword = $request->get('search');
+        $products = Product::where('title', 'LIKE', "%$keyword%")
+            ->orWhere('category', 'LIKE', "%$keyword%")->paginate(10);
+            return view('home.userpage', compact( 'products'));
+    }
 
 
 }

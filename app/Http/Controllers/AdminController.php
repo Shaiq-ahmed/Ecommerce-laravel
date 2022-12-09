@@ -13,6 +13,7 @@ use PDF;
 class AdminController extends Controller
 {
     public function view_category(){
+
         $categories = Category::all();
         return view('admin.category', compact('categories'));
     }

@@ -47,7 +47,7 @@
       @include('home.subscribe')
       <!-- end subscribe section -->
       <!-- client section -->
-      @include('home.client')
+      {{-- @include('home.client') --}}
       <!-- end client section -->
       <!-- footer start -->
       @include('home.footer')
@@ -59,6 +59,20 @@
 
          </p>
       </div>
+      <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            var scrollpos = sessionStorage.getItem('scrollpos');
+            if (scrollpos) {
+                window.scrollTo(0, scrollpos);
+                sessionStorage.removeItem('scrollpos');
+            }
+        });
+
+        window.addEventListener("beforeunload", function (e) {
+            sessionStorage.setItem('scrollpos', window.scrollY);
+        });
+    </script>
+
       <!-- jQery -->
       <script src="home/js/jquery-3.4.1.min.js"></script>
       <!-- popper js -->
