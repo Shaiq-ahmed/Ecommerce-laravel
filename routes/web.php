@@ -28,7 +28,8 @@ Route::middleware([
     })->name('dashboard');
 });
 // ------------------------Admin Routes ----------------------------
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
+Route::middleware(['auth', 'admin'])->group(function () {
+// Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
     Route::post('/add_category', [AdminController::class, 'add_category'])->middleware('auth');
     Route::get('/delete_category/{id}', [AdminController::class, 'delete_category'])->middleware('auth');
     Route::get('/view_product', [AdminController::class, 'view_product'])->middleware('auth');
@@ -45,6 +46,7 @@ Route::get('/pdf/{id}', [AdminController::class, 'pdf'])->middleware('auth');
 Route::get('/send_email/{id}', [AdminController::class, 'sendEmail'])->middleware('auth');
 Route::post('/send_user_email/{id}', [AdminController::class, 'sendUserEmail'])->middleware('auth');
 Route::get('/search_order', [AdminController::class, 'search_order'])->middleware('auth');
+    Route::get('/redirect', [HomeController::class, 'redirect']);
 });
 
 
@@ -52,7 +54,7 @@ Route::get('/search_order', [AdminController::class, 'search_order'])->middlewar
 
 //------------------------Home/User Routes----------------------------------
 
-Route::get('/redirect', [HomeController::class, 'redirect'])->middleware('auth', 'verified');
+
 Route::get('/product_details/{id}', [HomeController::class, 'product_details']);
 Route::post('/add_to_cart/{id}', [HomeController::class, 'add_to_cart'])->middleware('auth');
 Route::get('/show_cart', [HomeController::class, 'show_cart']);
